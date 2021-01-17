@@ -1,29 +1,49 @@
-const File = require("./utils/File.js");
 const fs = require("fs");
 
 class ProductFile {
-  constructor(file) {
-    this.file = file; 
+  constructor(filename, encoding) {
+    this.fileName = filename;
+    this.encoding = encoding;
   }
+
   getProducts() {
-    const products = fs.readFileSync(this.file.fileName, this.file.encoding);
+    const products = fs.readFileSync(this.fileName, this.encoding);
     return JSON.parse(products);
   }
+
   getProduct(id) {
     const products = this.getProducts();
-    for(let i = 0; i < products.length; i++){
+    for (let i = 0; i < products.length; i++) {
       return products[i].id === id ? products[i] : false;
     }
   }
-  createProduct(product){
+
+  createProduct(product) {
     const products = this.getProducts();
-    products.push(proudct)
-    fs.writeFileSync(this.file.fileName, this.file.encoding)
+    products.push(product);
+    fs.writeFileSync(this.fileName, JSON.stringify(products));
+    return true;
+  }
+  updateProduct(id, newProduct) {
+    const products = this.getProducts();
+    for (let i = 0; i < products.length; i++) {
+      if(products[i].id === id){
+        products[i] = newProduct;
+        fs.writeFileSync(this.fileName, JSON.stringify(products));
+        return true;
+      }
+    }
+    return false;
+  }
+  deleteProduct(id){
+    const products = this.getProducts();
+    for (let i = 0; i < products.length; i++) {
+      if(products[i].id === id){
+        products.splice(i,1);
+        fs.writeFileSync(this.fileName, JSON.stringify(products));
+        return true;
+      }
+    }
+    return false;
   }
 }
-
-let file = new File("./products.json",'utf8');
-let product = new ProductFile(file);
-console.log(product.getProduct(1));
-
-console.log()
