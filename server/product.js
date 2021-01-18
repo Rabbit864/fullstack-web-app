@@ -1,26 +1,22 @@
 const fs = require("fs");
 
-class ProductFile {
+class ProductFileModel {
   constructor(filename, encoding) {
     this.fileName = filename;
     this.encoding = encoding;
-  }
-
-  getProducts() {
-    try {
+     try {
       const products = fs.readFileSync(this.fileName, this.encoding);
-      return JSON.parse(products);
+      this.products = JSON.parse(products);
     } catch (e) {
-      return false;
+      this.products = false;
     }
   }
 
   getProduct(id) {
-    const products = this.getProducts();
-    if (products === false) {
+    if (this.products === false) {
       return false;
     }
-    const product = products.find((product) => product.id === id);
+    const product = this.products.find((product) => product.id === id);
     if (product === undefined) {
       return false;
     }
@@ -28,41 +24,40 @@ class ProductFile {
   }
 
   createProduct(product) {
-    const products = this.getProducts();
-    if (products === false) {
+    if (this.products === false) {
       return false;
     }
-    products.push(product);
-    fs.writeFileSync(this.fileName, JSON.stringify(products));
+    this.products.push(product);
+    fs.writeFileSync(this.fileName, JSON.stringify(this.products));
     return true;
   }
   updateProduct(id, newProduct) {
-    const products = this.getProducts();
-    if (products === false) {
+    if (this.products === false) {
       return false;
     }
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].id === id) {
-        products[i] = newProduct;
-        fs.writeFileSync(this.fileName, JSON.stringify(products));
+    for (let i = 0; i < this.products.length; i++) {
+      if (this.products[i].id === id) {
+        this.products[i] = newProduct;
+        fs.writeFileSync(this.fileName, JSON.stringify(this.products));
         return true;
       }
     }
     return false;
   }
   deleteProduct(id) {
-    const products = this.getProducts();
-    if (products === false) {
+    if (this.products === false) {
       return false;
     }
-    const indexDeleteProduct = products.findIndex(
+    const indexDeleteProduct = this.products.findIndex(
       (product) => product.id === id
     );
     if (indexDeleteProduct === -1) {
       return false;
     }
-    products.splice(indexDeleteProduct, 1);
-    fs.writeFileSync(this.fileName, JSON.stringify(products));
+    this.products.splice(indexDeleteProduct, 1);
+    fs.writeFileSync(this.fileName, JSON.stringify(this.products));
     return true;
   }
 }
+
+module.exports = ProductFileModel;
