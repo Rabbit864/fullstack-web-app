@@ -7,27 +7,42 @@ class ProductFile {
   }
 
   getProducts() {
-    const products = fs.readFileSync(this.fileName, this.encoding);
-    return JSON.parse(products);
+    try {
+      const products = fs.readFileSync(this.fileName, this.encoding);
+      return JSON.parse(products);
+    } catch (e) {
+      return false;
+    }
   }
 
   getProduct(id) {
     const products = this.getProducts();
-    for (let i = 0; i < products.length; i++) {
-      return products[i].id === id ? products[i] : false;
+    if (products === false) {
+      return false;
     }
+    const product = products.find((product) => product.id === id);
+    if (product === undefined) {
+      return false;
+    }
+    return product;
   }
 
   createProduct(product) {
     const products = this.getProducts();
+    if (products === false) {
+      return false;
+    }
     products.push(product);
     fs.writeFileSync(this.fileName, JSON.stringify(products));
     return true;
   }
   updateProduct(id, newProduct) {
     const products = this.getProducts();
+    if (products === false) {
+      return false;
+    }
     for (let i = 0; i < products.length; i++) {
-      if(products[i].id === id){
+      if (products[i].id === id) {
         products[i] = newProduct;
         fs.writeFileSync(this.fileName, JSON.stringify(products));
         return true;
@@ -35,15 +50,19 @@ class ProductFile {
     }
     return false;
   }
-  deleteProduct(id){
+  deleteProduct(id) {
     const products = this.getProducts();
-    for (let i = 0; i < products.length; i++) {
-      if(products[i].id === id){
-        products.splice(i,1);
-        fs.writeFileSync(this.fileName, JSON.stringify(products));
-        return true;
-      }
+    if (products === false) {
+      return false;
     }
-    return false;
+    const indexDeleteProduct = products.findIndex(
+      (product) => product.id === id
+    );
+    if (indexDeleteProduct === -1) {
+      return false;
+    }
+    products.splice(indexDeleteProduct, 1);
+    fs.writeFileSync(this.fileName, JSON.stringify(products));
+    return true;
   }
 }
