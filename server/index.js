@@ -33,7 +33,13 @@ app.post("/product", (req, res) => {
 });
 
 app.put("/product/:id", (req, res) => {
-  if (productModel.updateProduct(+req.params.id, req.body)) {
+  const id = req.params.id;
+  if (!/\d+/g.test(id)) {
+    return res
+      .status(400)
+      .json({ error: `Incorrect parametr ${id}, expected number` });
+  }
+  if (productModel.updateProduct(+id, req.body)) {
     res.json({ result: "ok" });
   } else {
     res.json({ error: "Failed to update product" });
@@ -41,7 +47,13 @@ app.put("/product/:id", (req, res) => {
 });
 
 app.delete("/product/:id", (req, res) => {
-  if (productModel.deleteProduct(+req.params.id)) {
+  const id = req.params.id;
+  if (!/\d+/g.test(id)) {
+    return res
+      .status(400)
+      .json({ error: `Incorrect parametr ${id}, expected number` });
+  }
+  if (productModel.deleteProduct(+id)) {
     res.json({ result: "ok" });
   } else {
     res.json({ error: "Failed to delete product" });
