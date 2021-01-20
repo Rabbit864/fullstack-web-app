@@ -11,7 +11,17 @@ app.get("/products", (req, res) => {
 });
 
 app.get("/product/:id", (req, res) => {
-  res.json(productModel.getProduct(+req.params.id));
+  const id = req.params.id;
+  if (!/\d+/g.test(id)) {
+    return res
+      .status(400)
+      .json({ error: `Incorrect parametr ${id}, expected number` });
+  }
+  const product = productModel.getProduct(+id);
+  if (product === false) {
+    return res.status(404).json({ massage: "Product not found" });
+  }
+  res.json(product);
 });
 
 app.post("/product", (req, res) => {
