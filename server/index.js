@@ -19,7 +19,7 @@ app.get("/product/:id", (req, res) => {
   }
   const product = productModel.getProduct(+id);
   if (product === false) {
-    return res.status(404).json({ massage: "Product not found" });
+    return res.status(404).json({ error: "Product not found" });
   }
   res.json(product);
 });
