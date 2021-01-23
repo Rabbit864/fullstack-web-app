@@ -3,23 +3,23 @@
 ## Шаг 1
 Установка зависимостей:
 ```
-  npm i 
+npm i 
 ```
 
 ## Шаг 2
 Сборка проекта:
 ```
-  npm run build
+npm run build
 ```
 
 ## Шаг 3
 Запуск nodeJS сервера
 ```
-  npm run server
+npm run server
 ```
 
 ## Шаг 4
 Запуск в отдельном терминале сервера под front
 ```
-  npm run dev
+npm run dev
 ```
