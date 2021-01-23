@@ -1,10 +1,20 @@
 const express = require("express");
 const ProductFileModel = require("./product");
-const productModel = new ProductFileModel("./products.json", "utf8");
+const path = require("path");
+const productModel = new ProductFileModel('server/products.json', "utf8");
 const app = express();
 const port = 80;
 
 app.use(express.json());
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept"
+  );
+  res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+  next();
+});
 
 app.get("/products", (req, res) => {
   res.json(productModel.products);

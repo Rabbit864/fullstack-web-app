@@ -1,0 +1,77 @@
+<table class="products">
+  <tr>
+    <th class="products__title">Название</th>
+    <th class="products__title">Количество</th>
+    <th class="products__title">Цена за 1</th>
+    <th class="products__title">Цена (total)</th>
+  </tr>
+  {{#each productElements}}
+  <tr>
+    <td class="products__element products__element--name">{{product_name}}</td>
+    <td class="products__element">
+      <input
+        type="text"
+        value="{{product_amount}}"
+        readonly
+        class="products__element--count"
+        id="count-{{id}}"
+      />
+    </td>
+    <td class="products__element">
+      <input
+        type="text"
+        value="{{product_price}}"
+        readonly
+        class="products__element--priceForOne"
+        id="priceForOne-{{id}}"
+      />
+    </td>
+    <td class="products__element">{{priceTotal}}</td>
+    <td>
+      <button class="products__button-edit" id="edit-{{id}}">edit</button>
+    </td>
+    <td>
+      <button class="products__button-delete" id="delete-{{id}}">delete</button>
+    </td>
+  </tr>
+  {{/each}}
+  <tr>
+    <td>Общая стоимость: {{allPrice}}</td>
+    <td class="products__element">
+      <button class="products__button-add">Add product</button>
+    </td>
+  </tr>
+</table>
+
+<div class="modal modal--add">
+  <div class="modal-content">
+    <span class="modal-close">&times;</span>
+    <h2>Add product</h2>
+    <form class="add-product">
+      <label for="name">Name:</label>
+      <input type="text" name="name" class="add-product-name" required>
+      <label for="amount">Amount:</label>
+      <input type="text" name="amount" class="add-product-amount" required>
+      <label for="price">Price:</label>
+      <input type="text" name="price" class="add-product-price" required>
+      <button>Add product</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal modal--edit">
+  <div class="modal-content">
+    <span class="modal-close">&times;</span>
+    <h2>Edit product</h2>
+    <form class="edit-product">
+      <label for="name">Name:</label>
+      <input type="text" name="name" class="edit-product-name" required>
+      <label for="amount">Amount:</label>
+      <input type="text" name="amount" class="edit-product-amount" required>
+      <label for="price">Price:</label>
+      <input type="text" name="price" class="edit-product-price" required>
+      <input type="hidden" name="id" class="edit-product-id">
+      <button>Edit product</button>
+    </form>
+  </div>
+</div>

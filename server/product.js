@@ -7,7 +7,8 @@ class ProductFileModel {
      try {
       const products = fs.readFileSync(this.fileName, this.encoding);
       this.products = JSON.parse(products);
-    } catch (e) {
+    } catch (error) {
+      console.log(error.message);
       this.products = false;
     }
   }
@@ -59,5 +60,6 @@ class ProductFileModel {
     return true;
   }
 }
+
 
 module.exports = ProductFileModel;

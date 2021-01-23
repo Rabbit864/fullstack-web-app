@@ -1,1 +1,1 @@
-[{"id":1,"product_name":"banana","product_price":25,"product_amount":2},{"id":2,"product_name":"apple","product_price":35,"product_amount":2}]
+[{"id":1,"product_name":"apple","product_amount":"6","product_price":"30"},{"id":2,"product_name":"orange","product_amount":"4","product_price":"30"},{"id":3,"product_name":"banana","product_amount":"4","product_price":"25"},{"id":4,"product_name":"mango","product_amount":"7","product_price":"35"}]
