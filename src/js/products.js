@@ -1,44 +1,8 @@
 import productsTemplate from '../template/products.handlebars';
 import { getAllPrice, calculationPriceProduct } from './productsFunctional';
-
-async function getProducts() {
-  const url = 'http://localhost:80/products';
-  const response = await fetch(url);
-  const products = await response.json();
-  return products;
-}
-
-async function deleteProduct(id) {
-  const url = `http://localhost:80/product/${id}`;
-  const response = await fetch(url, {
-    method: 'DELETE'
-  });
-  return response;
-}
-
-async function addProduct(product) {
-  const url = 'http://localhost:80/product';
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(product)
-  });
-  return response;
-}
-
-async function editProduct(id, product) {
-  const url = `http://localhost:80/product/${id}`;
-  const response = await fetch(url, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json;charset=utf-8'
-    },
-    body: JSON.stringify(product)
-  });
-  return response;
-}
+import {
+  getProducts, deleteProduct, addProduct, editProduct
+} from './api';
 
 window.onload = function load() {
   async function updateUI() {
@@ -86,8 +50,8 @@ window.onload = function load() {
           .value,
         product_price: formAddProduct.querySelector('.add-product-price').value
       };
-      const response = await addProduct(product);
-      if (response.ok) {
+      const isAdd = await addProduct(product);
+      if (isAdd) {
         alert('Продукт успешно добавлен');
       } else {
         alert('Продукт не был добавлен');
@@ -112,16 +76,18 @@ window.onload = function load() {
     const formEditProduct = document.querySelector('.edit-product');
     formEditProduct.onsubmit = async (e) => {
       e.preventDefault();
-      const id = await +formEditProduct.querySelector('.edit-product-id').value;
+      const id = Number(formEditProduct.querySelector('.edit-product-id').value);
+      const name = formEditProduct.querySelector('.edit-product-name').value;
+      const amount = formEditProduct.querySelector('.edit-product-amount').value;
+      const price = formEditProduct.querySelector('.edit-product-price').value;
       const product = {
         id,
-        product_name: await formEditProduct.querySelector('.edit-product-name').value,
-        product_amount: await formEditProduct.querySelector('.edit-product-amount')
-          .value,
-        product_price: await formEditProduct.querySelector('.edit-product-price').value
+        product_name: name,
+        product_amount: amount,
+        product_price: price
       };
-      const response = await editProduct(id, product);
-      if (response.ok) {
+      const isEdit = await editProduct(id, product);
+      if (isEdit) {
         alert('Продукт успешно изменён');
       } else {
         alert('Продукт не был изменён');
@@ -131,8 +97,8 @@ window.onload = function load() {
     document.querySelectorAll('.products__button-delete').forEach((element) => {
       element.addEventListener('click', async (event) => {
         const id = event.target.id.replace('delete-', '');
-        const response = await deleteProduct(id);
-        if (response.ok) {
+        const isDelete = await deleteProduct(id);
+        if (isDelete) {
           alert('Продукт успешно удалён');
         } else {
           alert('Продукт не был удалён');
